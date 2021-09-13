@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from "@material-ui/core/Dialog";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
-import Paper from "@material-ui/core/Paper";
-import CloseIcon from '@material-ui/icons/Close';
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
@@ -20,47 +17,38 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-// import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
+import Button from "@material-ui/core/Button";
 import { setProducts } from "../../redux/action/productAction";
-import { DialogTitle, DialogContent, DialogActions } from './DialogItems'
+import { DialogTitle, DialogContent, DialogActions } from "./DialogItems";
 
 const DRUG_DELETE = 1;
 const DRUG_EDIT = 2;
-const PRICE_DELETE = 3;
 const PRICE_EDIT = 4;
 export const ADD_DRUG = 5;
 const ADD_PRICE = 6;
 export const CONTENT = {
   [DRUG_DELETE]: {
-    content: 'Are you sure you want to delete this Drug?',
-    title: 'Delete drug'
+    content: "Are you sure you want to delete this Drug?",
+    title: "Delete Drug",
   },
   [DRUG_EDIT]: {
-    content: '',
-    title: ''
+    content: "",
+    title: "Edit Drug",
   },
-  [PRICE_DELETE]: {
-    content: 'Are you sure you want to delete Price?',
-    title: 'Delete Price'
-  },
+
   [PRICE_EDIT]: {
-    content: '',
-    title: ''
+    content: "",
+    title: "Edit Price",
   },
   [ADD_DRUG]: {
-    content: '',
-    title: ''
+    content: "",
+    title: "Add New Drug",
   },
   [ADD_PRICE]: {
-    content: '',
-    title: ''
+    content: "",
+    title: "Add New Drug",
   },
-}
+};
 const useRowStyles = makeStyles({
   root: {
     "& > *": {
@@ -69,33 +57,13 @@ const useRowStyles = makeStyles({
   },
 });
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  }
-}
-
-
-
-
-
 function Row(props) {
-  // const mClasses = useStyles();
-  const [modalStyle] = React.useState(getModalStyle)
   const dispatch = useDispatch();
   const { row } = props;
   const [open, setOpen] = useState(false);
   const [type, setType] = useState(undefined);
-  const [mPrice, setMPrice] = useState('');
-  const [mDrug, setMDrug] = useState('');
+  const [mPrice, setMPrice] = useState("");
+  const [mDrug, setMDrug] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedPriceId, setSelectedPriceId] = useState(undefined);
@@ -106,60 +74,65 @@ function Row(props) {
 
   const handlePriceEdit = (id) => (e) => {
     e.preventDefault();
-    setSelectedPriceId(id)
-    setType(PRICE_EDIT)
-     setOpenEdit(true)
-  }
+    setSelectedPriceId(id);
+    setType(PRICE_EDIT);
+    setOpenEdit(true);
+  };
 
   const handleDrugEdit = (id) => (e) => {
     e.preventDefault();
-    setSelectedDrugId(id)
-     setType(DRUG_EDIT)
-    setOpenEdit(true)
-  }
+    setSelectedDrugId(id);
+    setType(DRUG_EDIT);
+    setOpenEdit(true);
+  };
 
   const handleDrugDelete = () => {
     const newDrugList = { ...drugs };
     delete newDrugList[selectedDrugId];
-    dispatch(setProducts({ drugs: newDrugList, prices }))
-  }
+    dispatch(setProducts({ drugs: newDrugList, prices }));
+  };
 
   const openDeleteDialogBox = (id) => (e) => {
     e.preventDefault();
-    setSelectedDrugId(id)
-     setOpenDelete(true)
-    setType(DRUG_DELETE)
-  }
+    setSelectedDrugId(id);
+    setOpenDelete(true);
+    setType(DRUG_DELETE);
+  };
   const closeEditDialog = () => {
-    setOpenEdit(false)
-  }
+    setOpenEdit(false);
+  };
 
   const handleDrugNameChange = (e) => {
-    e.preventDefault()
-    setMDrug(e.target.value)
-  }
+    e.preventDefault();
+    setMDrug(e.target.value);
+  };
   const handlePriceChange = (e) => {
-    e.preventDefault()
-     setMPrice(e.target.value)
-  }
+    e.preventDefault();
+    setMPrice(e.target.value);
+  };
   const closeDeleteDialog = () => {
-    setOpenDelete(false)
-  }
+    setOpenDelete(false);
+  };
 
   const handleSave = () => {
-    const newDrugList = { ...drugs }
-    const newPriceList = { ...prices }
-    switch(type) {
+    const newDrugList = { ...drugs };
+    const newPriceList = { ...prices };
+    switch (type) {
       case PRICE_EDIT:
-        newPriceList[selectedPriceId] = { ...prices[selectedPriceId], price: mPrice };
-      break;
+        newPriceList[selectedPriceId] = {
+          ...prices[selectedPriceId],
+          price: mPrice,
+        };
+        break;
       case DRUG_EDIT:
         newDrugList[selectedDrugId] = { ...drugs[selectedDrugId], name: mDrug };
-      break;
+        break;
+
+      default:
     }
-    dispatch(setProducts({ drugs: newDrugList, prices: newPriceList }))
+    dispatch(setProducts({ drugs: newDrugList, prices: newPriceList }));
     setOpenEdit(false);
-  }
+  };
 
   return (
     <React.Fragment>
@@ -176,7 +149,6 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.name}
         </TableCell>
-        {/* <TableCell align="right">{row.name}</TableCell> */}
         <TableCell align="right">
           <IconButton onClick={handleDrugEdit(row.id)}>
             <EditIcon fontSize="large" />
@@ -202,7 +174,6 @@ function Row(props) {
                     <TableCell>Date</TableCell>
                     <TableCell align="right">Price</TableCell>
                     <TableCell align="right">Edit</TableCell>
-                    <TableCell align="right">Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -217,9 +188,7 @@ function Row(props) {
                           <EditIcon fontSize="large" />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="right">
-                        
-                      </TableCell>
+                      <TableCell align="right"></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -228,18 +197,29 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
-     <div>
-        <Dialog onClose={closeEditDialog} aria-labelledby="customized-dialog-title" open={openEdit}>
+      <div>
+        <Dialog
+          onClose={closeEditDialog}
+          aria-labelledby="customized-dialog-title"
+          open={openEdit}
+        >
           <DialogTitle id="customized-dialog-title" onClose={closeEditDialog}>
             {CONTENT[type]?.title}
           </DialogTitle>
           <DialogContent dividers>
-          {
-            type=== DRUG_EDIT?
-            <TextField type='text' onChange={handleDrugNameChange} value={mDrug || drugs[selectedDrugId]?.name}/>
-            :
-            <TextField type='number' onChange={handlePriceChange} value={mPrice || prices[selectedPriceId]?.price}/>
-          }
+            {type === DRUG_EDIT ? (
+              <TextField
+                type="text"
+                onChange={handleDrugNameChange}
+                value={mDrug || drugs[selectedDrugId]?.name}
+              />
+            ) : (
+              <TextField
+                type="number"
+                onChange={handlePriceChange}
+                value={mPrice || prices[selectedPriceId]?.price}
+              />
+            )}
           </DialogContent>
           <DialogActions>
             <Button autoFocus onClick={handleSave} color="primary">
@@ -247,12 +227,16 @@ function Row(props) {
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog onClose={closeDeleteDialog} aria-labelledby="customized-dialog-title" open={openDelete}>
+        <Dialog
+          onClose={closeDeleteDialog}
+          aria-labelledby="customized-dialog-title"
+          open={openDelete}
+        >
           <DialogTitle id="customized-dialog-title" onClose={closeDeleteDialog}>
             {CONTENT[type]?.title}
           </DialogTitle>
           <DialogContent dividers>
-          Are you sure you want to delete {drugs[selectedDrugId]?.name}
+            Are you sure you want to delete {drugs[selectedDrugId]?.name}
           </DialogContent>
           <DialogActions>
             <Button autoFocus onClick={handleDrugDelete} color="primary">
@@ -260,8 +244,9 @@ function Row(props) {
             </Button>
           </DialogActions>
         </Dialog>
-    </div>
+      </div>
     </React.Fragment>
-  )}
+  );
+}
 
 export default Row;

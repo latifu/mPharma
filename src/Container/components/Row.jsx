@@ -66,6 +66,7 @@ function Row(props) {
   const [mDrug, setMDrug] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  // const [openAdd, setOpenAdd] = useState(false);
   const [selectedPriceId, setSelectedPriceId] = useState(undefined);
   const [selectedDrugId, setSelectedDrugId] = useState(undefined);
   const classes = useRowStyles();
